@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Clock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #f8fafc;
+        }
+
+        .clock-container {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 1rem 2.25rem; /* 상하 패딩을 살짝 줄임 */
+            box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .time-wrapper {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.4rem;
+            line-height: 1.1; /* 라인 높이를 줄여 간격 밀착 */
+        }
+
+        .time-main {
+            font-family: 'Inter', sans-serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: #ffffff;
+            letter-spacing: -1px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .time-seconds {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            font-variant-numeric: tabular-nums;
+            margin-left: 2px;
+        }
+
+        .ampm {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #38bdf8;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin-left: 0.5rem;
+        }
+
+        .date {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            font-size: 0.95rem;
+            color: #ffffff;
+            font-weight: 700;
+            margin-top: -0.1rem; /* 마진을 음수값으로 주어 시간과 더 가깝게 배치 */
+            letter-spacing: -0.2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock-container">
+        <div class="time-wrapper">
+            <span id="time-main" class="time-main">0:00</span>
+            <span id="time-seconds" class="time-seconds">00</span>
+            <span id="ampm" class="ampm">AM</span>
+        </div>
+        <div id="date" class="date">2023. 10. 27. (금)</div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // 시간 데이터 추출
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            // 12시간제로 변환
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            const hoursStr = String(hours);
+
+            // UI 업데이트
+            document.getElementById('time-main').textContent = `${hoursStr}:${minutes}`;
+            document.getElementById('time-seconds').textContent = seconds;
+            document.getElementById('ampm').textContent = ampm;
+
+            // 날짜 업데이트 (요일 한글 설정)
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+            const weekDay = weekDays[now.getDay()];
+            
+            document.getElementById('date').textContent = `${year}. ${month}. ${day}. (${weekDay})`;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.body.style.background = `radial-gradient(circle at ${x}% ${y}%, #1e293b 0%, #0f172a 100%)`;
+        });
+    </script>
+</body>
+</html>
+
