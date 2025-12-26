@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimalist Clock</title>
+    <!-- 브라우저 탭용 아이콘은 유지 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' stroke='white' stroke-width='5' fill='none'/><path d='M50 20 V50 H70' stroke='white' stroke-width='5' stroke-linecap='round' fill='none'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
@@ -16,6 +18,7 @@
             min-height: 100vh;
             margin: 0;
             color: #f8fafc;
+            overflow: hidden;
         }
 
         .clock-container {
@@ -23,7 +26,7 @@
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 1.5rem;
-            padding: 1rem 2.25rem; /* 상하 패딩을 살짝 줄임 */
+            padding: 1.5rem 2.25rem;
             box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
@@ -33,7 +36,7 @@
             align-items: baseline;
             justify-content: center;
             gap: 0.4rem;
-            line-height: 1.1; /* 라인 높이를 줄여 간격 밀착 */
+            line-height: 1.1;
         }
 
         .time-main {
@@ -68,7 +71,7 @@
             font-size: 0.95rem;
             color: #ffffff;
             font-weight: 700;
-            margin-top: -0.1rem; /* 마진을 음수값으로 주어 시간과 더 가깝게 배치 */
+            margin-top: -0.1rem;
             letter-spacing: -0.2px;
         }
     </style>
@@ -76,6 +79,7 @@
 <body>
 
     <div class="clock-container">
+        <!-- 상단 아이콘 영역 제거됨 -->
         <div class="time-wrapper">
             <span id="time-main" class="time-main">0:00</span>
             <span id="time-seconds" class="time-seconds">00</span>
@@ -88,23 +92,19 @@
         function updateClock() {
             const now = new Date();
             
-            // 시간 데이터 추출
             let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             
-            // 12시간제로 변환
             hours = hours % 12;
             hours = hours ? hours : 12; 
             const hoursStr = String(hours);
 
-            // UI 업데이트
             document.getElementById('time-main').textContent = `${hoursStr}:${minutes}`;
             document.getElementById('time-seconds').textContent = seconds;
             document.getElementById('ampm').textContent = ampm;
 
-            // 날짜 업데이트 (요일 한글 설정)
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
